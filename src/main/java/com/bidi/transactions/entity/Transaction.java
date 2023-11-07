@@ -1,9 +1,6 @@
 package com.bidi.transactions.entity;
 
 import lombok.Data;
-import org.springframework.context.annotation.Configuration;
-
-import javax.persistence.Cache;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,20 +9,22 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "TRANSACTION")
 @Data
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idTransaction;
-    @Column(name = "USER_ID")
+    @Column(name = "user_id")
     private String userId;
-    @Column(name = "AMOOUNT")
+    @Column(name = "amount")
     private String amount;
-    @Column(name = "DESTINATION")
-    private String destination;
-    @Column(name = "TRANSACTION_DATE")
+    @Column(name = "phone_producer")
+    private String phoneProducer;
+    @Column(name = "phone_receiver")
+    private String phoneReceiver;
+    @Column(name = "transaction_date")
     private String transactionDate;
-    @Column(name = "REF_TRANSACTION")
-    private String redTransaction;
+    @Column(name = "ref_transaction")
+    private String refTransaction;
 }
