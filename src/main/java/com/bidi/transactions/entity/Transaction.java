@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "TRANSACTION")
@@ -15,16 +16,28 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long idTransaction;
+
     @Column(name = "user_id")
     private String userId;
+
     @Column(name = "amount")
-    private String amount;
+    private long amount;
+
     @Column(name = "phone_producer")
     private String phoneProducer;
+
     @Column(name = "phone_receiver")
     private String phoneReceiver;
+
     @Column(name = "transaction_date")
-    private String transactionDate;
-    @Column(name = "ref_transaction")
+    private LocalDateTime transactionDate;
+
+    @Column(name = "ref_transaction", unique = true)
     private String refTransaction;
+
+    @Column(name = "status")
+    private String status;
+
+    @Column(name = "description")
+    private String description;
 }
