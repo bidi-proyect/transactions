@@ -1,23 +1,19 @@
 package com.bidi.transactions.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.util.Date;
 
-@Setter
-@Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateTransactionRequest {
-
+@Getter
+@Setter
+@Builder
+public class GetTransactionByDateRequest {
+    private Date initDate;
+    private Date finalDate;
     private String userId;
-
-    private long amount;
-
-    private String phoneProducer;
-
-    private String phoneReceiver;
-
-
 }

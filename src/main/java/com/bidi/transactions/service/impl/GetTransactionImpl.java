@@ -8,7 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
+
+import static com.bidi.transactions.utils.TransactionMapper.transactionToResponse;
+import static com.bidi.transactions.utils.Util.generateReference;
 
 @Service
 @RequiredArgsConstructor
@@ -18,21 +20,6 @@ public class GetTransactionImpl implements GetTransactionService {
     @Override
     public List<TransactionResponse> getTransactions(String phoneNumber) {
         List<Transaction> transactionList = transactionRepository.findTransactionByPhoneProducer(phoneNumber);
-        return transactionToResponse(transactionList);
-    }
-
-    public List<TransactionResponse> transactionToResponse(List<Transaction> transactionList) {
-        return transactionList.stream().map(transaction -> {
-            TransactionResponse response = new TransactionResponse();
-            response.setUserId(transaction.getUserId());
-            response.setAmount(transaction.getAmount());
-            response.setPhoneProducer(transaction.getPhoneProducer());
-            response.setPhoneReceiver(transaction.getPhoneReceiver());
-            response.setTransactionDate(transaction.getTransactionDate());
-            response.setRefTransaction(transaction.getRefTransaction());
-            response.setStatus(transaction.getStatus());
-            response.setDescription(transaction.getDescription());
-            return response;
-        }).collect(Collectors.toList());
+        return transactionList.stream().map(transaction -> transactionToResponse(transaction, generateReference())).toList();
     }
 }
