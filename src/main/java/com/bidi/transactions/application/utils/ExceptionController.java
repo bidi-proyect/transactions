@@ -1,4 +1,4 @@
-package com.bidi.transactions.utils;
+package com.bidi.transactions.application.utils;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;

@@ -1,4 +1,4 @@
-package com.bidi.transactions.service;
+package com.bidi.transactions.application.usecase;
 
 import com.bidi.transactions.dto.TransactionResponse;
 import org.springframework.stereotype.Service;
