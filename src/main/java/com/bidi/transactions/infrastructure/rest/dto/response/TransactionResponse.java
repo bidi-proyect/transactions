@@ -1,4 +1,4 @@
-package com.bidi.transactions.dto;
+package com.bidi.transactions.infrastructure.rest.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
