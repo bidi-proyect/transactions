@@ -1,6 +1,6 @@
-package com.bidi.transactions.infrastructure.rest.dto.request;
+package com.bidi.transactions.domain.model;
 
-public record CreateTransactionRequest(
+public record RequestCreateTransaction(
         String userId,
         long amount,
         String phoneProducer,

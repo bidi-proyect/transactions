@@ -1,30 +1,28 @@
 package com.bidi.transactions.application.usecase.impl;
 
 import com.bidi.transactions.application.usecase.GetTransactionsByDate;
-import com.bidi.transactions.dto.GetTransactionByDateRequest;
-import com.bidi.transactions.dto.TransactionResponse;
-import com.bidi.transactions.infrastructure.persistence.entity.Transaction;
-import com.bidi.transactions.infrastructure.persistence.repository.TransactionRepository;
+import com.bidi.transactions.domain.entity.TransactionDao;
+import com.bidi.transactions.domain.model.RequestGetTransactionByDate;
+import com.bidi.transactions.domain.model.ResponseTransaction;
+import com.bidi.transactions.domain.service.ServiceTransactionRepository;
+import com.bidi.transactions.domain.mapper.TransactionDtoMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-import static com.bidi.transactions.application.utils.TransactionMapper.transactionToResponse;
-import static com.bidi.transactions.application.utils.Util.generateReference;
-
 @Service
 @RequiredArgsConstructor
 public class GetTransactionsByDateImpl implements GetTransactionsByDate {
-    private final TransactionRepository transactionRepository;
+
+    private final ServiceTransactionRepository transactionRepository;
+    private final TransactionDtoMapper transactionDtoMapper;
+
     @Override
-    public List<TransactionResponse> transactionsByDate(GetTransactionByDateRequest getTransactionByDateRequest) {
-        List<Transaction> transactionList = transactionRepository.monthlyTransactions(
-                getTransactionByDateRequest.getInitDate(),
-                getTransactionByDateRequest.getFinalDate(),
-                getTransactionByDateRequest.getUserId());
-        return transactionList.stream()
-                .map(transaction -> transactionToResponse(transaction, generateReference()))
-                .filter(transaction -> transaction.getAmount() > 0).toList();
+    public List<ResponseTransaction> transactionsByDate(RequestGetTransactionByDate request) {
+        List<TransactionDao> transactions = transactionRepository.monthlyTransactions(request.initDate(), request.finalDate(), request.userId());
+        return transactions.stream()
+                .map(transactionDtoMapper::daoToResponseDto)
+                .toList();
     }
 }

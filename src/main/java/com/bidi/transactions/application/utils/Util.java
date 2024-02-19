@@ -5,12 +5,14 @@ import org.springframework.stereotype.Component;
 
 import java.util.Random;
 
+import static com.bidi.transactions.application.utils.StringConstants.MESSAGE_INDEX_OF;
+
 @Component
 @RequiredArgsConstructor
 public class Util {
     private static final Random random = new Random();
     public static String extractRestResponse(String input) {
-        return input.substring(input.indexOf(StringConstants.MESSAGE_INDEX_OF) + 9, input.length() - 2).replace("\"", "");
+        return input.substring(input.indexOf(MESSAGE_INDEX_OF.getValue()) + 9, input.length() - 2).replace("\"", "");
     }
 
     public static String generateReference() {
