@@ -1,7 +1,8 @@
-package com.bidi.transactions.infrastructure.rest.dto.response;
+package com.bidi.transactions.domain.model;
 
 import java.util.Date;
-public record TransactionResponse(
+public record ResponseTransaction(
+        long idTransaction,
         String userId,
         long amount,
         String phoneProducer,

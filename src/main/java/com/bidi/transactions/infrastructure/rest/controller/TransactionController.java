@@ -6,9 +6,10 @@ import com.bidi.transactions.application.usecase.GetTransactionService;
 import com.bidi.transactions.application.usecase.GetTransactionsByDate;
 import com.bidi.transactions.application.usecase.UpdateBalanceService;
 import com.bidi.transactions.application.usecase.UpdateTransactionService;
-import com.bidi.transactions.dto.CreateTransactionRequest;
-import com.bidi.transactions.dto.GetTransactionByDateRequest;
-import com.bidi.transactions.dto.TransactionResponse;
+import com.bidi.transactions.infrastructure.rest.dto.request.CreateTransactionRequest;
+import com.bidi.transactions.infrastructure.rest.dto.request.GetTransactionByDateRequest;
+import com.bidi.transactions.infrastructure.rest.dto.response.TransactionResponse;
+import com.bidi.transactions.infrastructure.rest.mapper.TransactionModelMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -36,13 +37,15 @@ public class TransactionController {
     private final UpdateTransactionService updateTransactionService;
     private final UpdateBalanceService updateBalanceService;
 
-    @GetMapping("/all/{userId}")
+    private final TransactionModelMapper transactionModelMapper;
+
+    @GetMapping("/all/{phoneNumber}")
     @ResponseStatus(HttpStatus.OK)
     public List<TransactionResponse> getTransaction(
             @RequestHeader("Authorization") String token,
-            @PathVariable String userId) {
+            @PathVariable String phoneNumber) {
 
-        return getTransactionService.getTransactions(userId);
+        return transactionModelMapper.responseDomainToInfrastructure(getTransactionService.getTransactions(phoneNumber));
     }
 
     @GetMapping("/month/{userId}")
@@ -51,24 +54,31 @@ public class TransactionController {
             @RequestHeader("Authorization") String token,
             @PathVariable String userId) {
 
-        return getMonthlyTransactions.monthlyTransaction(userId);
+        return transactionModelMapper.responseDomainToInfrastructure(getMonthlyTransactions.monthlyTransaction(userId));
     }
 
     @PostMapping("/byDate")
     @ResponseStatus(HttpStatus.OK)
-    public List<TransactionResponse> getTransactionsByDate(
+    public List<TransactionResponse> transactionsByDate(
             @RequestHeader("Authorization") String token,
-            @RequestBody GetTransactionByDateRequest getTransactionByDateRequest) {
+            @RequestBody GetTransactionByDateRequest request) {
 
-        return getTransactionsByDate.transactionsByDate(getTransactionByDateRequest);
+        return transactionModelMapper.responseDomainToInfrastructure(
+                getTransactionsByDate.transactionsByDate(
+                        transactionModelMapper.requestInfrastructureToRequestDomain(request)
+                ));
     }
 
-    @PostMapping("/")
+    @PostMapping()
     @ResponseStatus(HttpStatus.OK)
     public TransactionResponse createTransaction(
             @RequestHeader("Authorization") String token,
-            @RequestBody CreateTransactionRequest createTransactionRequest) {
+            @RequestBody CreateTransactionRequest request) {
 
-        return createTransactionService.createTransaction(createTransactionRequest, token);
+        return transactionModelMapper.responseDomainToInfrastructure(
+                createTransactionService.createTransaction(
+                        transactionModelMapper.requestInfrastructureToRequestDomain(request),
+                        token
+                ));
     }
 }
