@@ -7,10 +7,10 @@ import com.bidi.transactions.infrastructure.persistence.entity.Transaction;
 import com.bidi.transactions.infrastructure.persistence.mapper.TransactionDaoMapper;
 import com.bidi.transactions.infrastructure.persistence.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +20,7 @@ import static com.bidi.transactions.application.utils.Util.generateReference;
 @Service
 @RequiredArgsConstructor
 @Lazy
+@Slf4j
 public class ServiceTransactionRepositoryImpl implements ServiceTransactionRepository {
 
     private final TransactionRepository transactionRepository;
@@ -28,6 +29,7 @@ public class ServiceTransactionRepositoryImpl implements ServiceTransactionRepos
     @Override
     public TransactionDao save(RequestCreateTransaction request,
                                String status, String description) {
+        log.info("Updating data...");
         Transaction transaction = new Transaction();
         transaction.setUserId(request.userId());
         transaction.setAmount(status.equals("Cancelled") ? 0 : request.amount());
@@ -38,6 +40,7 @@ public class ServiceTransactionRepositoryImpl implements ServiceTransactionRepos
         transaction.setStatus(status);
         transaction.setDescription(description);
         transactionRepository.save(transaction);
+        log.info("Successfully.");
         return transactionDaoMapper.transactionToTransactionDao(transaction);
     }
 

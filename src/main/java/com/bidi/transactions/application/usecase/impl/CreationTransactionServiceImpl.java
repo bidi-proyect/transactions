@@ -32,7 +32,8 @@ public class CreationTransactionServiceImpl implements CreationTransactionServic
             String token) {
         log.info("Request is made...");
         try {
-            MessageResponse response = balanceRest.makeRestToBalanceService(transactionDtoMapper.requestDomainToRequestInfrastructure(request), token);
+            MessageResponse response = balanceRest.makeRestToBalanceService(
+                    transactionDtoMapper.requestDomainToRequestInfrastructure(request), token);
             log.info("BalanceService response: {}", response.message());
             return transactionDtoMapper.daoToResponseDto(transactionRepository.save(
                     request,
@@ -50,6 +51,6 @@ public class CreationTransactionServiceImpl implements CreationTransactionServic
     }
 
     public String setDescription(String statusCode) {
-        return statusCode.equals("00") ? SUCCESSFULLY.getValue() : ERROR.getValue();
+        return statusCode != null && !statusCode.equals("00") ? ERROR.getValue() : SUCCESSFULLY.getValue();
     }
 }
